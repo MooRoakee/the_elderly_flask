@@ -42,12 +42,12 @@ def page_login():
         if q_dict['password']==password:
 
             q_json = jsonify(q_dict)
-            return q_json,200
+            return q_json
         else:
-            return jsonify(WRONG_PASSWORD),300
+            return jsonify(WRONG_PASSWORD)
 
     except UnmappedClassError:
-        return jsonify(NO_SUCH_USER),300
+        return jsonify(NO_SUCH_USER)
     
 @app.route('/register')
 def page_register():
