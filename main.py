@@ -49,6 +49,20 @@ def page_login():
     except UnmappedClassError:
         return jsonify(NO_SUCH_USER),300
     
+@app.route('/register')
+def page_register():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    try:
+        q = db_session.query(User).filter(User.username==username).first()
+        return jsonify(USER_EXISTS)
+
+    except:
+        db_session.execute("insert into user (username,password,numOfDevices)values(%s,%s,%d)" % (username, password,0))
+            
+        db_session.commit()
+        return 'success'
+
 
 def serialize(model):
     from sqlalchemy.orm import class_mapper
@@ -57,4 +71,4 @@ def serialize(model):
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')
