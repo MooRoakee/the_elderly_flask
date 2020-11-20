@@ -55,7 +55,13 @@ def page_register():
     password = request.args.get('password')
     try:
         q = db_session.query(User).filter(User.username==username).first()
-        return jsonify(USER_EXISTS)
+        if(q==None):
+            db_session.execute("insert into user (username,password,numOfDevices)values(%s,%s,%d)" % (username, password,0))
+            
+            db_session.commit()
+            return 'success'
+        else:
+            return jsonify(USER_EXISTS)
 
     except:
         db_session.execute("insert into user (username,password,numOfDevices)values(%s,%s,%d)" % (username, password,0))
